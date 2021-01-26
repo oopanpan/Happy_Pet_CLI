@@ -54,6 +54,7 @@ class CommandLineInterface
         add_routine(user)
     end
 
+    #add a new routine for the pet
     def add_routine(user)
         puts "\n\nPlease add a routine: "
         input = STDIN.gets.chomp()
