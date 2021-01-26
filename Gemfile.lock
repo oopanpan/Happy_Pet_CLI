@@ -17,6 +17,8 @@ GEM
     concurrent-ruby (1.1.8)
     database_cleaner (1.8.5)
     diff-lcs (1.4.4)
+    faker (2.15.1)
+      i18n (>= 1.6, < 2)
     i18n (1.8.7)
       concurrent-ruby (~> 1.0)
     method_source (1.0.0)
@@ -65,6 +67,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (~> 5.2.3)
   database_cleaner
+  faker
   pry
   rake
   require_all

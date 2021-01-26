@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 2021_01_26_193239) do
     t.string "name"
     t.string "description"
     t.boolean "if_complete"
-    t.integer "pet_id"
     t.integer "user_id"
+    t.integer "pet_id"
     t.date "on_date"
   end
 
