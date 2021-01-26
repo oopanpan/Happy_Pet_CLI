@@ -1,4 +1,4 @@
 class User < ActiveRecord::Base
-    has_many :routines  
-    has_many :pets, through: :routines
+    has_many :pets   
+    has_many :routines, through: :pets
 end
