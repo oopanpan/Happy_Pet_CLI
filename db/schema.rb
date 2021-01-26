@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_26_030322) do
+ActiveRecord::Schema.define(version: 2021_01_26_193239) do
 
   create_table "pets", force: :cascade do |t|
     t.string "name"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_030322) do
     t.boolean "if_complete"
     t.integer "pet_id"
     t.integer "user_id"
+    t.date "on_date"
   end
 
   create_table "users", force: :cascade do |t|
