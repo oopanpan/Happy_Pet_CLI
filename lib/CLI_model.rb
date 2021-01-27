@@ -5,7 +5,7 @@ class CommandLineInterface
     #*************************
     #get user input, return the imput content
     def user_name_input
-        gets.chomp.capitalize
+        gets.chomp
     end
     #display greeting message
     def display_greeting_message
@@ -20,6 +20,26 @@ class CommandLineInterface
         puts "[3] "
     end
 
+    def top_menu_selection(user, input)
+        case input
+        when "1"
+            pet = user.add_pet_by_prompt
+            puts "#{pet.name} is a lovely cutie."
+            $in_top_menu = false
+            pet
+        when "2"
+            display_array_with_number(user.pets_by_name)
+            pet = pets_selector(user, gets.chomp.to_i)
+            $in_top_menu = false
+            pet
+        when "0"
+            exit
+        else 
+            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
+            top_menu(user)
+        end
+    end
+    
     def pets_selector(user, number)
         pet_name = user.pets_by_name[number-1]
         Pet.find_by(name:pet_name)
@@ -70,24 +90,38 @@ class CommandLineInterface
         Routine.create(name: name, description: description, user_id: user.id, pet_id: pet.id )
     end
 
+    #find the singular routine object
+    def routine_selector(name, user, pet)
+        Routine.find_by(name: name, user_id: user.id, pet_id: pet.id)
+    end
+
+
     
 
 
 
 
     def run
-        running = true
-        while running do
+        $running = true
+        while $running do
             display_greeting_message
             user = User.find_or_create_by(name: user_name_input)
             puts "Welcome, #{user.name}"
-            top_menu
-            pet = top_menu_selection(user, gets.chomp)
+            $in_top_menu = true
+            while $in_top_menu do
+                top_menu
+                pet = top_menu_selection(user, gets.chomp)
+            end
 
             routine_menu_option
             routine_user_input(user, pet, gets.chomp)
+            routine_name = user.all_routines_by_name(pet)[gets.chop.to_i-1]
+            routine = routine_selector(routine_name, user, pet)
+            routine.edit_routing_by_prompt
+            puts "Hello"
 
-        gets
+
+        
         end
 
 
@@ -119,23 +153,6 @@ class CommandLineInterface
         puts self.user_input(user, input)
     end
 
-    def top_menu_selection(user, input)
-        case input
-        when "1"
-            pet = user.add_pet_by_prompt
-            puts "#{pet.name} is a lovely cutie."
-            pet
-        when "2"
-            display_array_with_number(user.pets_by_name)
-            pet = pets_selector(user, gets.chomp.to_i)
-            pet
-        when "0"
-            exit 
-        else 
-            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
-            menu_option(user)
-        end
-    end
     
     def exit 
         "\n\nGOODBYE! HAVE A PRODUCTIVE DAY!"
@@ -193,7 +210,7 @@ class CommandLineInterface
         when "2"
             display_array_with_number(user.all_routines_by_name(pet))
         when "0"
-            exit 
+            exit
         else 
             print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
             routine_menu_option(user)

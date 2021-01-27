@@ -48,9 +48,7 @@ class User < ActiveRecord::Base
         end
     end
 
-    def edit_routine_by_prompt(pet, routine)
 
-    end
 
 
 
