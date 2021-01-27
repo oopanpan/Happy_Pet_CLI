@@ -33,7 +33,7 @@ class CommandLineInterface
             menu_option(user)
         end
     end
-    git fetch
+    
     def exit 
         "\n\nGOODBYE! HAVE A PRODUCTIVE DAY!"
     end
@@ -44,8 +44,7 @@ class CommandLineInterface
         puts "\n\nTo add a pet, Please enter the pet name: "
         input = STDIN.gets.chomp()
         new_pet = Pet.new(name:input)
-        new_pet.user_id = self.id
-        put "Please enter #{input} species: "
+        puts "Please enter #{input} species: "
         new_pet.species = STDIN.gets.chomp()
         puts "Please enter #{input} age: "
         new_pet.age = STDIN.gets.chomp()
@@ -56,45 +55,53 @@ class CommandLineInterface
 
     #add a new routine for the pet
     def add_routine(user)
-        puts "\n\nPlease add a routine: "
-        input = STDIN.gets.chomp()
-        new_routine = Routine.new(name:input)
-        puts "Please enter #{input} description: "
+        puts "\n\nPlease enter pet name: "
+        input1 = STDIN.gets.chomp()
+        puts "Please add a routine: "
+        input2 = STDIN.gets.chomp()
+        nr = Pet.find_by(name:input1)
+        new_routine = Routine.new(user_id:user.id, pet_id:nr.id, name:input2)
+        puts "Please enter #{input2} description: "
         new_routine.description = STDIN.gets.chomp()
-        puts "Pet #{input} routine created!"
+        new_routine.save
+        puts "Pet #{input1} #{input2} routine created!"
         routine_menu_option(user)
     end
 
-    # def view_current_routine(pet,user)
-    #     Routine.find_by(user_id:user.id, pet_id:pet.id)
-    # end
+    def view_current_routine(user, pet)
+        #Routine.find_by(user_id:user.id, pet_id:pet.id)
+        puts "\n\nPlease select from the following current routines:"
+        Routine.all.each do |routine| 
+            puts routine.name
+        end
+    end
 
 
-    # def routine_menu_option(user)
-    #     puts "Press 1 to ADD ROUTINE!"
-    #     puts "Press 2 to VIEW ALL ROUTINE!"
-    #     puts "Press 0 to exit! "
-    #     input = STDIN.gets.chomp()
-    #     puts self.routine_user_input(user, input)
-    # end
+    def routine_menu_option(user)
+        puts "Press 1 to ADD ROUTINE!"
+        puts "Press 2 to VIEW ALL ROUTINE!"
+        puts "Press 0 to exit! "
+        input = STDIN.gets.chomp()
+        puts self.routine_user_input(user, input)
+    end
 
-    # def routine_user_input(user, input)
-    #     case input
-    #     when "1"
-    #         add_routine(user)  
-    #     when "2"
-    #         view_current_routine(user)
-    #     when "0"
-    #         exit 
-    #     else 
-    #         print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
-    #         routine_menu_option(user)
-    #     end
-    # end
+    def routine_user_input(user, input)
+        case input
+        when "1"
+            add_routine(user)  
+        when "2"
+            view_current_routine(user)
+        when "0"
+            exit 
+        else 
+            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
+            routine_menu_option(user)
+        end
+    end
  
     
-    # def view_pet(user)
+    def view_pet(user)
 
-    # end
+    end
 
 end
