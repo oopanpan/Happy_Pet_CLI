@@ -101,7 +101,7 @@ class CommandLineInterface
     end
 
     def menu_option(user)
-        puts "Press 1 to ADD PETS!"
+        puts "\n\nPress 1 to ADD PETS!"
         puts "Press 2 to VIEW PETS!"
         puts "Press 0 to exit! "
         input = STDIN.gets.chomp()
@@ -164,11 +164,24 @@ class CommandLineInterface
         end
     end
 
+    def delete_routine(user)
+        user.routine.each do |r|
+            puts "Routine ID#: #{r.id}"
+            puts "Routine name: #{r.name}"
+            puts "Routine description: #{r.description}"
+        end
+        puts "\n\nPlease select the routine to delete by Routine ID#: "
+        input = STDIN.gets.chomp()
+        Routine.find(input.to_i).destroy
+        puts "\n\nRoutine ID# #{input} deleted!"
+        routine_menu_option(user)
+    end
 
     def routine_menu_option(user)
         puts "Press 1 to ADD ROUTINE!"
         puts "Press 2 to VIEW ALL ROUTINE!"
-        puts "Press 0 to exit! "
+        puts "Press 3 to DELETE ROUTINE!"
+        puts "Press 0 to EXIT! "
         input = STDIN.gets.chomp()
         puts self.routine_user_input(user, input)
     end
@@ -179,6 +192,8 @@ class CommandLineInterface
             add_routine(user)  
         when "2"
             view_current_routine(user)
+        when "3"
+            delete_routine(user)
         when "0"
             exit 
         else 
