@@ -18,13 +18,14 @@ class Routine < ActiveRecord::Base
                 self.description = des
                 self.save
                 puts "Routine updated!"
-                confirmation = 'N'
+                confirmation = false
             elsif choice == "2"
                 puts "Deleteing #{self.name}, for #{self.pet.name}. Confirm? Y/N"
                 del_confirm = gets.chomp
                 if del_confirm == 'Y'
                     self.destroy
                     puts "Routine entry deleted"
+                    confirmation = false
                 end
             else
                 puts "\nInput not regconize, please choose again."

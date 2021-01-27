@@ -35,8 +35,7 @@ class CommandLineInterface
         when "0"
             exit
         else 
-            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
-            top_menu(user)
+            print "\n#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS."
         end
     end
     
@@ -78,6 +77,7 @@ class CommandLineInterface
         Pet.create(name: name, species: species, age: age)
     end
 
+
     #*************************
             #Routine    
     #*************************
@@ -112,11 +112,16 @@ class CommandLineInterface
                 top_menu
                 pet = top_menu_selection(user, gets.chomp)
             end
-
+            $in_routine_menu = true
+            while $in_routine_menu do
             routine_menu_option
             routine_user_input(user, pet, gets.chomp)
             routine_name = user.all_routines_by_name(pet)[gets.chop.to_i-1]
             routine = routine_selector(routine_name, user, pet)
+                if routine
+                    $in_routine_menu = false
+                end
+            end
             routine.edit_routing_by_prompt
             puts "Hello"
 
