@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
     def self.all_user_names
         self.all.map{|user| user.name}
     end
+
     def deleting_routines_with_user
         arr = Routine.all.select{|routine| routine.user_id == self.id}
         arr.each{|routine| routine.destroy}
@@ -22,6 +23,10 @@ class User < ActiveRecord::Base
     
     def pets_by_name
         self.pets.map{|pet| pet.name}.uniq
+    end
+
+    def pets_by_detail
+        self.pets.uniq
     end
     
     #all routines for one pet

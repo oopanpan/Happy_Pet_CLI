@@ -16,12 +16,10 @@ class Routine < ActiveRecord::Base
             choice = gets.chomp
             if choice == "1"
                 puts Rainbow("What's the new name of the routine?").orange 
-                name = gets.chomp
+                name = gets.chomp.capitalize
                 puts Rainbow("Describe the new #{name} routine for #{self.pet.name}.").orange 
                 des = gets.chomp
-                self.name = name
-                self.description = des
-                self.save
+                self.update(name:name, description:des)
                 puts Rainbow("**** ROUTINE ENTRY UPDATED! ****").yellow
                 confirmation = false
             elsif choice == "2"
@@ -29,9 +27,14 @@ class Routine < ActiveRecord::Base
                 puts Rainbow("Deleting '#{self.name}' for #{self.pet.name}. Confirm? Y/N").orange 
                 del_confirm = gets.chomp
                 if del_confirm == 'Y'
+                    puts ".."
+                    sleep(1)
+                    puts "..."
+                    sleep(1)
                     puts Rainbow("**** ROUTINE ENTRY DELETED! ****").yellow
                     self.destroy
                     Pet.data_saver
+                    sleep(2)
                         if pet.routines.count == 0
                             $in_pet_menu = false
                         end

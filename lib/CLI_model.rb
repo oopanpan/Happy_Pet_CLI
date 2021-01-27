@@ -28,7 +28,7 @@ class CommandLineInterface
         |  | |  |  |  | |  ||  |      |  |      `-./  /.__)        |  |      |  `---.   |  |    
         `--' `--'  `--' `--'`--'      `--'        `--'             `--'      `------'   `--'    
        ").magenta
-        puts Rainbow("Welcome to Happy Pet").yellow
+        puts Rainbow("Welcome to ").yellow + Rainbow("Happy Pet").yellow.underline
         puts Rainbow("Please enter your name:").orange
     end
     
@@ -74,6 +74,7 @@ class CommandLineInterface
                     puts Rainbow("...").yellow
                     sleep(1)
                     puts Rainbow("Goodbye #{pet.name} we'll miss you!").yellow
+                    pause_on
                     Routine.delete_routines_along_with_pet(pet)
                     pet.destroy
                     user.reload
@@ -92,7 +93,7 @@ class CommandLineInterface
     end
 
     def pause_on
-        puts "Press any key to continue\r"
+        puts Rainbow("\n**Press any key to continue**\r").magenta
         gets
     end
 
@@ -103,12 +104,14 @@ class CommandLineInterface
             puts "Enter [2] to VIEW ALL ROUTINES in DATABASE"
             puts "Enter [3] to VIEW ALL USERS"
             puts "Enter [4] to VIEW YOUR USER ID"
-            puts "Enter [5] to DELETE YOUR ACCOUNT"
+            puts "Enter [5] to CHANGE SYSTEM'S DATETIME"
+            puts "Enter [6] to DELETE YOUR ACCOUNT"
             puts "Enter [0] to Go Back"
             input = gets.chomp
             case input
             when "1"
-                puts display_all_pets_by_name
+                Pet.data_saver
+                puts display_pets_details_with_number(Pet.all)
                 pause_on
             when "2"
                 puts display_all_routines_by_name
@@ -120,6 +123,12 @@ class CommandLineInterface
                 puts "\nYour ID is #{user.id}"
                 pause_on
             when "5"
+                puts "Puts new date in the format MMDDHHMMYYYY"
+                date = gets.chomp
+                system "sudo date #{date}"
+                puts "system date is updated"
+                pause_on
+            when "6"
                 puts "All the associated routines and pets will be erased from database"
                 puts "Deleting #{user.name}, Confirm? Y/N"
                 confirmation = gets.chomp
@@ -141,6 +150,7 @@ class CommandLineInterface
         puts "Enter" + Rainbow(" [1] ").cyan + Rainbow("to ADD ROUTINE!").underline
         puts "Enter" + Rainbow(" [2] ").cyan + Rainbow("to VIEW INCOMPLETE ROUTINE FOR THE DAY!").underline
         puts "Enter" + Rainbow(" [3] ").cyan + Rainbow("to VIEW ALL ROUTINE!").underline
+        puts "Enter" + Rainbow(" [4] ").cyan + Rainbow("to PET DETAILS!").underline
         puts "Enter" + Rainbow(" [0] ").cyan + Rainbow("to GO BACK TO LAST MENU!").underline 
     end
         
@@ -174,6 +184,20 @@ class CommandLineInterface
                 puts Rainbow("\nPlease select a routine by number:").orange 
                 display_array_with_number(user.all_routines_by_name(pet))
                 3
+            end
+        when "4"
+            puts Rainbow("PetID: #{pet.id}, Name: #{pet.name}, Age: #{pet.age}, Species: #{pet.species}").yellow
+            sleep(1)
+            puts Rainbow("Do you want to edit? Y/N").orange
+            editing = gets.chop
+            if editing == "Y"
+                pet.edit_by_prompt
+                pet.reload
+                pause_on
+            else
+                puts Rainbow("Nothing happened, redirecting to previous menu...").yellow
+                sleep(2)
+                false
             end
         when "0"
             $in_pet_menu = false
@@ -230,15 +254,23 @@ class CommandLineInterface
     def display_all_users_by_name
         User.all.map{|user| user.name}
     end
-    
-    def display_array_with_number(array)
-        array.each_with_index{|element,i| puts "[#{i+1}] #{element}"}
-    end
-    
     #display the routines needs to be done for the dog 
     def display_routines(user, dog)
         user.routines.where(pet_id: pet.id)
     end
+    
+    def display_array_with_number(array)
+        array.each_with_index{|element, i| puts "[#{i+1}] #{element}"}
+    end
+    
+    def display_pets_details_with_number(array)
+        array.each{|element| puts "ID:#{element.id} #{element.name} age:#{element.age} species:#{element.species}"}
+    end
+
+    def all_species_arr
+        Pet.order(species: :asc)
+    end
+    
     #****************
     #User
     #****************
@@ -271,12 +303,16 @@ class CommandLineInterface
                 puts Rainbow("\nUser: #{user.name}\n").yellow
                 top_menu
                 pet = top_menu_selection(user, gets.chomp)
-                $in_pet_menu = true
-                if pet && pet.routines.count == 0
+                if pet == nil
+                    puts Rainbow("**** INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. ****").magenta
+                    sleep(2)
+                elsif pet && pet.routines.count == 0
                     pet.add_routine(user)
                 end
+                $in_pet_menu = true
                 while $in_pet_menu && pet do
-                    puts Rainbow("\nThis is #{pet.name}'s Routine menu").yellow
+                    system 'clear'
+                    puts Rainbow("\nThis is #{pet.name}'s main menu").yellow
                     pet.reset_routines_status(date_today)
                     puts Rainbow("There's #{user.todo_routines(pet).count} more incomplete routine(s)\n").yellow    
                     user.reload
