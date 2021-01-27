@@ -33,7 +33,7 @@ class CommandLineInterface
             menu_option(user)
         end
     end
-
+    git fetch
     def exit 
         "\n\nGOODBYE! HAVE A PRODUCTIVE DAY!"
     end
@@ -65,36 +65,36 @@ class CommandLineInterface
         routine_menu_option(user)
     end
 
-    def view_current_routine(pet,user)
-        Routine.find_by(user_id:user.id, pet_id:pet.id)
-    end
+    # def view_current_routine(pet,user)
+    #     Routine.find_by(user_id:user.id, pet_id:pet.id)
+    # end
 
 
-    def routine_menu_option(user)
-        puts "Press 1 to ADD ROUTINE!"
-        puts "Press 2 to VIEW ALL ROUTINE!"
-        puts "Press 0 to exit! "
-        input = STDIN.gets.chomp()
-        puts self.routine_user_input(user, input)
-    end
+    # def routine_menu_option(user)
+    #     puts "Press 1 to ADD ROUTINE!"
+    #     puts "Press 2 to VIEW ALL ROUTINE!"
+    #     puts "Press 0 to exit! "
+    #     input = STDIN.gets.chomp()
+    #     puts self.routine_user_input(user, input)
+    # end
 
-    def routine_user_input(user, input)
-        case input
-        when "1"
-            add_routine(user)  
-        when "2"
-            view_current_routine(user)
-        when "0"
-            exit 
-        else 
-            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
-            routine_menu_option(user)
-        end
-    end
+    # def routine_user_input(user, input)
+    #     case input
+    #     when "1"
+    #         add_routine(user)  
+    #     when "2"
+    #         view_current_routine(user)
+    #     when "0"
+    #         exit 
+    #     else 
+    #         print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
+    #         routine_menu_option(user)
+    #     end
+    # end
  
     
-    def view_pet(user)
+    # def view_pet(user)
 
-    end
+    # end
 
 end
