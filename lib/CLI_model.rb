@@ -1,16 +1,97 @@
 class CommandLineInterface
 
-
-
-
-
-
-
-
-    def run 
-        user = greet 
-        self.menu_option(user)
+    #*************************
+            #INTERFACE
+    #*************************
+    #get user input, return the imput content
+    def user_name_input
+        gets.chomp.capitalize
     end
+    #display greeting message
+    def display_greeting_message
+        puts "Welcome to This App"
+        puts "Please enter your name:"
+    end
+
+    def top_menu
+        puts "What would you like to do?"
+        puts "[1] Add a new pet"
+        puts "[2] View all of your pet(s)"
+        puts "[3] "
+    end
+
+
+    
+    #display main menu, take in an user object, display all the dog
+    #in the database
+    def display_all_pets_by_name
+        arr = Pet.all.map{|pet| pet.name}
+    end
+
+    def display_array_with_number(array)
+        array.each_with_index{|element,i| puts "[#{i+1}] #{element}"}
+    end
+    
+    #display the routines needs to be done for the dog 
+    def display_routines(user, dog)
+        user.routines.where(pet_id: pet.id)
+    end
+    #****************
+    #User
+    #****************
+    #
+    #*******************
+            #Pet
+    #*******************
+    def add_pet_by_prompt
+        puts "What's your pet's name?"
+        name = gets.chomp.capitalize
+        puts "What's their species?"
+        species = gets.chomp.downcase
+        puts "What's their age?"
+        age = gets.chomp.to_i
+        Pet.create(name: name, species: species, age: age)
+    end
+
+    #*************************
+            #Routine    
+    #*************************
+    def add_routine_by_prompt(user, pet)
+        puts "\n\nCongratulations on your new pet"
+        puts "What's the name of the routine"
+        name = gets.chomp.capitalize
+        puts "Description of the routine"
+        description = gets
+        Routine.create(name: name, description: description, user_id: user.id, pet_id: pet.id )
+    end
+
+    
+
+
+
+
+    def run
+        display_all_pets_by_name
+        display_greeting_message
+        user = User.find_or_create_by(name: user_name_input)
+        puts "Welcome, #{user.name}"
+        top_menu
+        gets
+
+
+    end
+
+
+
+
+
+
+
+    # def run 
+    #     user = greet 
+    #     self.menu_option(user)
+    #     puts "Hi"
+    # end
 
     def greet 
         puts "Welcome to PanSin Pet Routine Checker"
@@ -27,19 +108,19 @@ class CommandLineInterface
         puts self.user_input(user, input)
     end
 
-    def user_input(user, input)
-        case input
-        when "1"
-            add_pet(user)  
-        when "2"
-            view_pet(user)
-        when "0"
-            exit 
-        else 
-            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
-            menu_option(user)
-        end
-    end
+    # def user_input(user, input)
+    #     case input
+    #     when "1"
+    #         add_pet(user)  
+    #     when "2"
+    #         view_pet(user)
+    #     when "0"
+    #         exit 
+    #     else 
+    #         print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
+    #         menu_option(user)
+    #     end
+    # end
 
     def exit 
         "\n\nGOODBYE! HAVE A PRODUCTIVE DAY!"
@@ -51,8 +132,11 @@ class CommandLineInterface
         puts "\n\nTo add a pet, Please enter the pet name: "
         input = STDIN.gets.chomp()
         new_pet = Pet.new(name:input)
-        new_pet.user_id = user.id
-        put "Please enter #{input} species: "
+        # new_pet.user_id = user.id
+        np = Pet.find_or_create_by(name:input)
+
+        new_pet = Pet.new(user_id:user.id, pet_id:np.id)
+        puts "Please enter #{input} species: "
         new_pet.species = STDIN.gets.chomp()
         puts "Please enter #{input} age: "
         new_pet.age = STDIN.gets.chomp()
@@ -72,6 +156,7 @@ class CommandLineInterface
         routine_menu_option(user)
     end
 
+    #take in two argument, pet and user, and return all routines
     def view_current_routine(pet,user)
         Routine.find_by(user_id:user.id, pet_id:pet.id)
     end
