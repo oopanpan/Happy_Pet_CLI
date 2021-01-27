@@ -90,7 +90,6 @@ class CommandLineInterface
     def run 
         user = greet 
         self.menu_option(user)
-        puts "Hi"
     end
 
     def greet 
