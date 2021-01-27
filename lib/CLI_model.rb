@@ -1,5 +1,12 @@
 class CommandLineInterface
 
+
+
+
+
+
+
+
     def run 
         user = greet 
         self.menu_option(user)
@@ -44,7 +51,7 @@ class CommandLineInterface
         puts "\n\nTo add a pet, Please enter the pet name: "
         input = STDIN.gets.chomp()
         new_pet = Pet.new(name:input)
-        new_pet.user_id = self.id
+        new_pet.user_id = user.id
         put "Please enter #{input} species: "
         new_pet.species = STDIN.gets.chomp()
         puts "Please enter #{input} age: "
