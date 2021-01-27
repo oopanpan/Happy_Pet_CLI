@@ -20,6 +20,11 @@ class CommandLineInterface
         puts "[3] "
     end
 
+    def pets_selector(user, number)
+        pet_name = user.pets_by_name[number-1]
+        Pet.find_by(name:pet_name)
+    end
+
 
     
     #display main menu, take in an user object, display all the dog
@@ -70,27 +75,34 @@ class CommandLineInterface
 
 
 
-    # def run
-    #     display_all_pets_by_name
-    #     display_greeting_message
-    #     user = User.find_or_create_by(name: user_name_input)
-    #     puts "Welcome, #{user.name}"
-    #     top_menu
-    #     gets
+    def run
+        running = true
+        while running do
+            display_greeting_message
+            user = User.find_or_create_by(name: user_name_input)
+            puts "Welcome, #{user.name}"
+            top_menu
+            pet = top_menu_selection(user, gets.chomp)
+
+            routine_menu_option
+            routine_user_input(user, pet, gets.chomp)
+
+        gets
+        end
 
 
-    # end
-
-
-
-
-
-
-
-    def run 
-        user = greet 
-        self.menu_option(user)
     end
+
+
+
+
+
+
+
+    # def run 
+    #     user = greet 
+    #     self.menu_option(user)
+    # end
 
     def greet 
         puts "Welcome to PanSin Pet Routine Checker"
@@ -107,12 +119,16 @@ class CommandLineInterface
         puts self.user_input(user, input)
     end
 
-    def user_input(user, input)
+    def top_menu_selection(user, input)
         case input
         when "1"
-            add_pet(user)  
+            pet = user.add_pet_by_prompt
+            puts "#{pet.name} is a lovely cutie."
+            pet
         when "2"
-            view_pet(user)
+            display_array_with_number(user.pets_by_name)
+            pet = pets_selector(user, gets.chomp.to_i)
+            pet
         when "0"
             exit 
         else 
@@ -141,18 +157,18 @@ class CommandLineInterface
     end
 
     #add a new routine for the pet
-    def add_routine(user)
-        puts "\n\nPlease enter pet name: "
-        input1 = STDIN.gets.chomp()
+    def add_routine(user, pet)
+        # puts "\n\nPlease enter pet name: "
+        # input1 = STDIN.gets.chomp()
         puts "Please add a routine: "
-        input2 = STDIN.gets.chomp()
-        nr = Pet.find_by(name:input1)
-        new_routine = Routine.new(user_id:user.id, pet_id:nr.id, name:input2)
-        puts "Please enter #{input2} description: "
-        new_routine.description = STDIN.gets.chomp()
-        new_routine.save
-        puts "Pet #{input1} #{input2} routine created!"
-        routine_menu_option(user)
+        r_name = STDIN.gets.chomp()
+        # nr = Pet.find_by(name:input1)
+        # new_routine = Routine.new(user_id:user.id, pet_id:nr.id, name:input2)
+        puts "Please enter routine #{r_name} description: "
+        r_description = STDIN.gets.chomp()
+        Routine.create(name:r_name, description: r_description, user_id: user.id, pet_id: pet.id)
+        puts "Pet #{pet.name}, #{r_name} routine created!"
+        routine_menu_option
     end
 
     def view_current_routine(user, pet)
@@ -164,20 +180,18 @@ class CommandLineInterface
     end
 
 
-    def routine_menu_option(user)
+    def routine_menu_option
         puts "Press 1 to ADD ROUTINE!"
         puts "Press 2 to VIEW ALL ROUTINE!"
         puts "Press 0 to exit! "
-        input = STDIN.gets.chomp()
-        puts self.routine_user_input(user, input)
     end
 
-    def routine_user_input(user, input)
+    def routine_user_input(user, pet, input)
         case input
         when "1"
-            add_routine(user)  
+            add_routine(user, pet)
         when "2"
-            view_current_routine(user)
+            display_array_with_number(user.all_routines_by_name(pet))
         when "0"
             exit 
         else 
@@ -188,7 +202,7 @@ class CommandLineInterface
  
     
     def view_pet(user)
-
+        
     end
 
 end
