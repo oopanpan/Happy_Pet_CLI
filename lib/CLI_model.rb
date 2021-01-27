@@ -94,7 +94,7 @@ class CommandLineInterface
     end
 
     def greet 
-        puts "Welcome to PanSin Pet Routine Checker"
+        puts "\n\nWelcome to PanSin Pet Routine Checker"
         puts "Please enter your name: "
         input = STDIN.gets.chomp()
         user = User.find_or_create_by(name:input)
@@ -143,9 +143,9 @@ class CommandLineInterface
 
     #add a new routine for the pet
     def add_routine(user)
-        puts "\n\nPlease enter pet name: "
+        puts "\n\nTo add a routine, Please enter pet name: "
         input1 = STDIN.gets.chomp()
-        puts "Please add a routine: "
+        puts "Please enter routine: "
         input2 = STDIN.gets.chomp()
         nr = Pet.find_by(name:input1)
         new_routine = Routine.new(user_id:user.id, pet_id:nr.id, name:input2)
@@ -156,29 +156,50 @@ class CommandLineInterface
         routine_menu_option(user)
     end
 
-    def view_current_routine(user, pet)
+    def view_current_routine(user)
         #Routine.find_by(user_id:user.id, pet_id:pet.id)
-        puts "\n\nPlease select from the following current routines:"
+        #select the pet , then allow to select the routines
+        #puts "\n\nPlease select from the following pets: "
+        puts "\n\nPlease enter pet name: "
+        input1 = STDIN.gets.chomp()
+        puts "\n\nPlease select from the following current routines: "
         Routine.all.each do |routine| 
-            puts routine.name
+            if pet.name == input1
+                puts routine.name
+            end
+        end #should we use .uniq#
+
+
+        puts "\n\nPlease select the routine: "
+        input = STDIN.gets.chomp()
+        Routine.find_by(name:input).pets.each do |pet|
+            puts "\n\n#{pet.name} Routine"
+            puts "Routine name: #{routine.name}"
+            puts "Routine description: #{routine.description}"
         end
+        routine_menu_option(user)
     end
 
     def delete_routine(user)
-        user.routine.each do |r|
+        user.routines.each do |r|
             puts "Routine ID#: #{r.id}"
             puts "Routine name: #{r.name}"
             puts "Routine description: #{r.description}"
         end
         puts "\n\nPlease select the routine to delete by Routine ID#: "
         input = STDIN.gets.chomp()
-        Routine.find(input.to_i).destroy
-        puts "\n\nRoutine ID# #{input} deleted!"
+        if user.routines.ids.include?(input)
+            Routine.find(input.to_i).destroy
+            # Routine.find(input).destroy
+            puts "\n\nRoutine ID##{input} deleted!"
+        else 
+            puts "\n\nYOU HAVE NO RIGHTS TO THIS ROUTINE!"
+        end
         routine_menu_option(user)
     end
 
     def routine_menu_option(user)
-        puts "Press 1 to ADD ROUTINE!"
+        puts "\n\nPress 1 to ADD ROUTINE!"
         puts "Press 2 to VIEW ALL ROUTINE!"
         puts "Press 3 to DELETE ROUTINE!"
         puts "Press 0 to EXIT! "
