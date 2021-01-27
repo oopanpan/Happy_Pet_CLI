@@ -70,28 +70,28 @@ class CommandLineInterface
 
 
 
-    def run
-        display_all_pets_by_name
-        display_greeting_message
-        user = User.find_or_create_by(name: user_name_input)
-        puts "Welcome, #{user.name}"
-        top_menu
-        gets
+    # def run
+    #     display_all_pets_by_name
+    #     display_greeting_message
+    #     user = User.find_or_create_by(name: user_name_input)
+    #     puts "Welcome, #{user.name}"
+    #     top_menu
+    #     gets
 
 
-    end
-
-
-
-
-
-
-
-    # def run 
-    #     user = greet 
-    #     self.menu_option(user)
-    #     puts "Hi"
     # end
+
+
+
+
+
+
+
+    def run 
+        user = greet 
+        self.menu_option(user)
+        puts "Hi"
+    end
 
     def greet 
         puts "Welcome to PanSin Pet Routine Checker"
@@ -108,20 +108,20 @@ class CommandLineInterface
         puts self.user_input(user, input)
     end
 
-    # def user_input(user, input)
-    #     case input
-    #     when "1"
-    #         add_pet(user)  
-    #     when "2"
-    #         view_pet(user)
-    #     when "0"
-    #         exit 
-    #     else 
-    #         print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
-    #         menu_option(user)
-    #     end
-    # end
-
+    def user_input(user, input)
+        case input
+        when "1"
+            add_pet(user)  
+        when "2"
+            view_pet(user)
+        when "0"
+            exit 
+        else 
+            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
+            menu_option(user)
+        end
+    end
+    
     def exit 
         "\n\nGOODBYE! HAVE A PRODUCTIVE DAY!"
     end
@@ -132,10 +132,6 @@ class CommandLineInterface
         puts "\n\nTo add a pet, Please enter the pet name: "
         input = STDIN.gets.chomp()
         new_pet = Pet.new(name:input)
-        # new_pet.user_id = user.id
-        np = Pet.find_or_create_by(name:input)
-
-        new_pet = Pet.new(user_id:user.id, pet_id:np.id)
         puts "Please enter #{input} species: "
         new_pet.species = STDIN.gets.chomp()
         puts "Please enter #{input} age: "
@@ -147,18 +143,25 @@ class CommandLineInterface
 
     #add a new routine for the pet
     def add_routine(user)
-        puts "\n\nPlease add a routine: "
-        input = STDIN.gets.chomp()
-        new_routine = Routine.new(name:input)
-        puts "Please enter #{input} description: "
+        puts "\n\nPlease enter pet name: "
+        input1 = STDIN.gets.chomp()
+        puts "Please add a routine: "
+        input2 = STDIN.gets.chomp()
+        nr = Pet.find_by(name:input1)
+        new_routine = Routine.new(user_id:user.id, pet_id:nr.id, name:input2)
+        puts "Please enter #{input2} description: "
         new_routine.description = STDIN.gets.chomp()
-        puts "Pet #{input} routine created!"
+        new_routine.save
+        puts "Pet #{input1} #{input2} routine created!"
         routine_menu_option(user)
     end
 
-    #take in two argument, pet and user, and return all routines
-    def view_current_routine(pet,user)
-        Routine.find_by(user_id:user.id, pet_id:pet.id)
+    def view_current_routine(user, pet)
+        #Routine.find_by(user_id:user.id, pet_id:pet.id)
+        puts "\n\nPlease select from the following current routines:"
+        Routine.all.each do |routine| 
+            puts routine.name
+        end
     end
 
 
