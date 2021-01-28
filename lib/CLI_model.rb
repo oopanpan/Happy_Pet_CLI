@@ -83,12 +83,17 @@ class CommandLineInterface
         
     def routine_user_input(user, pet, input)
         array = user.all_routines_by_name(pet)
+        incomp_arr = user.todo_routines(pet)
         case input
         when "1"
             pet.add_routine(user)
         when "2"
-            if array == []
-                puts "#{pet.name} doesn't seem to have any incomplete routine yet"
+            if array.count == 0
+                puts "--#{pet.name} doesn't seem to have any incomplete routine yet"
+                sleep(2)
+                false
+            elsif incomp_arr.count == 0
+                puts "--There's no more routine for #{pet.name} today!"
                 sleep(2)
                 false
             else
@@ -98,7 +103,7 @@ class CommandLineInterface
                 2
             end
         when "3"
-            if array == []
+            if array.count == 0
                 puts "#{pet.name} doesn't seem to have any routine yet"
                 sleep(2)
                 false
