@@ -7,11 +7,11 @@ class User < ActiveRecord::Base
     end
 
     def add_pet_by_prompt
-        puts "\nTo add a pet, Please enter the pet name:"
+        puts Rainbow("\nTo add a pet, Please enter the pet name:").orange 
         name = gets.chomp.capitalize
-        puts "What's their species?"
+        puts Rainbow("What's their species?").orange
         species = gets.chomp.downcase
-        puts "What's their age?"
+        puts Rainbow("What's their age?").orange
         age = gets.chomp.to_i
         Pet.create(name: name, species: species, age: age)
     end
@@ -40,6 +40,7 @@ class User < ActiveRecord::Base
     def all_routines_by_name(pet)
         all_routines(pet).map{|r| r.name}
     end
+
     #returning list of routines for input pet object
     def finished_routines(pet)
         self.routines.where(pet_id: pet.id, if_complete: true)
@@ -52,26 +53,5 @@ class User < ActiveRecord::Base
     def todo_routines_by_name(pet)
         todo_routines(pet).map{|r| r.name}
     end
-
-    def user_input(user, input)
-        case input
-        when "1"
-            add_pet(user)  
-        when "2"
-            view_pet(user)
-        when "0"
-            exit 
-        else 
-            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
-            menu_option(user)
-        end
-    end
-
-
-
-
-
-
-
 
 end
