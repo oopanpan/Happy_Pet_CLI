@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
     end
 
     def add_pet_by_prompt
-        puts "What's your pet's name?"
+        puts "\nTo add a pet, Please enter the pet name:"
         name = gets.chomp.capitalize
         puts "What's their species?"
         species = gets.chomp.downcase
@@ -18,10 +18,6 @@ class User < ActiveRecord::Base
     
     def pets_by_name
         self.pets.map{|pet| pet.name}.uniq
-    end
-
-    def delete_a_pet(index)
-
     end
     
     #all routines for one pet
@@ -38,9 +34,12 @@ class User < ActiveRecord::Base
     end
 
     def todo_routines(pet)
-        self.routines.where(pet_id: pet.id, if_complete: false)
+        self.routines.where(pet_id: pet.id, if_complete: nil)
     end
-    
+
+    def todo_routines_by_name(pet)
+        todo_routines(pet).map{|r| r.name}
+    end
 
     def user_input(user, input)
         case input

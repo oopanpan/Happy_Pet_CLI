@@ -2,8 +2,8 @@ class Routine < ActiveRecord::Base
     belongs_to :user
     belongs_to :pet
 
-    def self.delete_routines_with_no_pet
-        bye = Routine.all.select{|routine| routine.pet === []}
+    def self.delete_routines_along_with_pet(pet)
+        bye = Routine.all.select{|routine| routine.pet_id == pet.id}
         bye.each{|routine| routine.destroy}
     end
 
@@ -30,6 +30,7 @@ class Routine < ActiveRecord::Base
                 if del_confirm == 'Y'
                     self.destroy
                     puts "***ROUTINE ENTRY DELETED***"
+                    Pet.data_saver
                     confirmation = false
                 end
             else

@@ -15,4 +15,10 @@ class Pet < ActiveRecord::Base
         Routine.create(name:r_name, description: r_description, user_id: user.id, pet_id: self.id)
         puts "\n****#{self.name}'s #{r_name} routine created!***"
     end
+
+    def reset_routines_status(date)
+        arr = self.routines.select{|routine| routine.on_date != date}
+        arr.each{|routine| routine.if_complete = nil}
+    end
+
 end

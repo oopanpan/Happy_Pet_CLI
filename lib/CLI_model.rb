@@ -7,6 +7,11 @@ class CommandLineInterface
     def user_name_input
         gets.chomp
     end
+    #get the date today in a YYYYMMDD format as integer
+    def date_today
+        date = Time.now.strftime("%F")
+        date.split("-").join.to_i
+    end
     #display greeting message
     def display_greeting_message
         puts "Welcome to This App"
@@ -47,10 +52,19 @@ class CommandLineInterface
                     puts "Which pet would you like to say goodbuy? Pleasee Select by number"
                     display_array_with_number(array)
                     pet = pets_selector(user, gets.chomp.to_i)
-                    puts "Goodbye #{pet.name} we'll miss you!"
-                    pet.destroy
-                    Routine.delete_routines_with_no_pet
-                    false
+                    puts "We're saying goodbye to #{pet.name},correct? Y/N"
+                        ans = gets.chomp
+                        if ans == "Y"
+                            puts ".."
+                            sleep(1)
+                            puts "..."
+                            sleep(1)
+                            puts "Goodbye #{pet.name} we'll miss you!"
+                            Routine.delete_routines_along_with_pet(pet)
+                            pet.destroy
+                            user.reload
+                            false
+                        end
                 end
         when "0"
             puts "\nGOODBYE! HAVE A PRODUCTIVE DAY!\n"
@@ -62,17 +76,37 @@ class CommandLineInterface
         
     def routine_menu
         puts "Press [1] to ADD ROUTINE!"
-        puts "Press [2] to VIEW ALL ROUTINE!"
+        puts "Press [2] to VIEW IMCOMPLETE ROUTINE FOR THE DAY!"
+        puts "Press [3] to VIEW ALL ROUTINE!"
         puts "Press [0] to GO BACK TO LAST MENU! "
     end
         
     def routine_user_input(user, pet, input)
+        array = user.all_routines_by_name(pet)
         case input
         when "1"
             pet.add_routine(user)
         when "2"
-            puts "\nPlease select a routine by number:"
-            display_array_with_number(user.all_routines_by_name(pet))
+            if array == []
+                puts "#{pet.name} doesn't seem to have any incomplete routine yet"
+                sleep(2)
+                false
+            else
+                puts "\nPlease select a routine by number:"
+                display_array_with_number(user.todo_routines_by_name(pet))
+                user.reload
+                2
+            end
+        when "3"
+            if array == []
+                puts "#{pet.name} doesn't seem to have any routine yet"
+                sleep(2)
+                false
+            else
+                puts "\nPlease select a routine by number:"
+                display_array_with_number(user.all_routines_by_name(pet))
+                3
+            end
         when "0"
             $in_pet_menu = false
         else 
@@ -87,10 +121,13 @@ class CommandLineInterface
         input = gets.chomp
         case input
             when "1"
-                puts "\nRoutine: #{routine.name}\n#{routine.description}\n\nIs this routine finish? Y/N"
+                puts "\nRoutine: #{routine.name}\n#{routine.description}\n\nIs this routine finished? Y/N"
                 complete = gets.chomp
                 if complete == "Y"
                     routine.if_complete = true
+                    routine.on_date = date_today
+                    routine.save
+                    puts "\nNoice!\n"
                 end
             when "2"
                 routine.edit_routine_by_prompt
@@ -102,7 +139,8 @@ class CommandLineInterface
                 routine_menu
         end
     end
-        
+    
+
     
     #display main menu, take in an user object, display all the dog
     #in the database
@@ -121,19 +159,7 @@ class CommandLineInterface
     #****************
     #User
     #****************
-    #
-    #*******************
-    #Pet
-    #*******************
-    def add_pet_by_prompt
-        puts "What's your pet's name?"
-        name = gets.chomp.capitalize
-        puts "What's their species?"
-        species = gets.chomp.downcase
-        puts "What's their age?"
-        age = gets.chomp.to_i
-        Pet.create(name: name, species: species, age: age)
-    end
+    
     
     def pets_selector(user, number)
         pet_name = user.pets_by_name[number-1]
@@ -144,27 +170,13 @@ class CommandLineInterface
             #Routine    
     #*************************
 
-
-    # def add_routine_by_prompt(user, pet)
-    #     puts "\n\nCongratulations on your new pet"
-    #     puts "What's the name of the routine"
-    #     name = gets.chomp.capitalize
-    #     puts "Description of the routine"
-    #     description = gets
-    #     Routine.create(name: name, description: description, user_id: user.id, pet_id: pet.id )
-    # end
-
-    #find the singular routine object
+    #find the singular routine object by name of the routine and userID petID
     def routine_selector(name, user, pet)
         Routine.find_by(name: name, user_id: user.id, pet_id: pet.id)
     end
 
 
     
-
-
-
-
     def run
         $running = true
         while $running do
@@ -177,30 +189,21 @@ class CommandLineInterface
                 $in_pet_menu = true
                 while $in_pet_menu && pet do
                     puts "\nThis is #{pet.name}'s Routine menu"
+                    pet.reset_routines_status(date_today)
                     routine_menu
                     proceed = routine_user_input(user, pet, gets.chomp)
-                    if proceed
+                    if proceed == 2
+                        routine_name = user.todo_routines_by_name(pet)[gets.chop.to_i-1]
+                        routine = routine_selector(routine_name, user, pet)
+                        routine_sub_menu(routine)
+                    elsif proceed == 3
                         routine_name = user.all_routines_by_name(pet)[gets.chop.to_i-1]
                         routine = routine_selector(routine_name, user, pet)
                         routine_sub_menu(routine)
                     end
-
-                    # if routine
-                    #     $in_routine_menu = true
-                    # end
-                    
-                    
                 end
-            end
-
-            routine.edit_routing_by_prompt
-            puts "Hello"
-
-
-        
+            end    
         end
-
-        exit_message
     end
 
 
@@ -245,17 +248,6 @@ class CommandLineInterface
         new_pet.save
         puts "Pet #{input} created!"
         add_routine(user)
-    end
-
-    #add a new routine for the pet
-
-
-    def view_current_routine(user, pet)
-        #Routine.find_by(user_id:user.id, pet_id:pet.id)
-        puts "\n\nPlease select from the following current routines:"
-        Routine.all.each do |routine| 
-            puts routine.name
-        end
     end
 
 
