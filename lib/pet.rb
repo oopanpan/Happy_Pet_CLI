@@ -3,7 +3,7 @@ class Pet < ActiveRecord::Base
     has_many :users, through: :routines
 
     def self.data_saver
-        bye = Pet.all.select{|pet| pet.users === []}
+        bye = Pet.all.select{|pet| pet.routines == []}
         bye.each{|pet| pet.destroy}
     end
 
@@ -19,6 +19,7 @@ class Pet < ActiveRecord::Base
     def reset_routines_status(date)
         arr = self.routines.select{|routine| routine.on_date != date}
         arr.each{|routine| routine.if_complete = nil}
+        arr.each{|routine| routine.save}
     end
 
 end

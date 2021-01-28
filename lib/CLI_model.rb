@@ -14,7 +14,7 @@ class CommandLineInterface
     end
     #display greeting message
     def display_greeting_message
-        puts "Welcome to This App"
+        puts "Welcome to Happy Pet"
         puts "Please enter your name:"
     end
     
@@ -193,9 +193,14 @@ class CommandLineInterface
                 top_menu
                 pet = top_menu_selection(user, gets.chomp)
                 $in_pet_menu = true
+                if pet.routines.count == 0
+                    pet.add_routine(user)
+                end
                 while $in_pet_menu && pet do
                     puts "\nThis is #{pet.name}'s Routine menu"
                     pet.reset_routines_status(date_today)
+                    puts "There's #{user.todo_routines(pet).count} more imcomplete routine(s)\n"
+                    user.reload
                     routine_menu
                     proceed = routine_user_input(user, pet, gets.chomp)
                     if proceed == 2
@@ -214,7 +219,8 @@ class CommandLineInterface
 
 
 
-
+#----------------------------------------------------------
+#----------------------------------------------------------
 
 
 

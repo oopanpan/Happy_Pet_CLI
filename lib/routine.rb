@@ -25,13 +25,15 @@ class Routine < ActiveRecord::Base
                 puts "Routine updated!"
                 confirmation = false
             elsif choice == "2"
+                puts "**Warning, deleting the last routine will erase pet data on your account**"
                 puts "Deleteing #{self.name}, for #{self.pet.name}. Confirm? Y/N"
                 del_confirm = gets.chomp
                 if del_confirm == 'Y'
-                    self.destroy
                     puts "***ROUTINE ENTRY DELETED***"
-                    Pet.data_saver
+
+                    self.destroy
                     confirmation = false
+                    $in_pet_menu = false
                 end
             else
                 puts "\nInput not regconize, please choose again."
