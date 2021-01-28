@@ -14,7 +14,7 @@ class CommandLineInterface
     end
     #display greeting message
     def display_greeting_message
-        puts "Welcome to Happy Pet"
+        puts Rainbow("  Welcome to Happy Pet  ").orange.bright.underline
         puts "Please enter your name:"
     end
     
