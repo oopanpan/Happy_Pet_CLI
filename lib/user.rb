@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
         when "0"
             exit 
         else 
-            print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
+            print Rainbow("#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n").red
             menu_option(user)
         end
     end
