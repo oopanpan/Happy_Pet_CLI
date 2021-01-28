@@ -14,7 +14,7 @@ class CommandLineInterface
     end
     #display greeting message
     def display_greeting_message
-        puts Rainbow("  Welcome to Happy Pet  ").orange.bright.underline
+        puts "Welcome to Happy Pet"
         puts "Please enter your name:"
     end
     
@@ -66,11 +66,27 @@ class CommandLineInterface
                             false
                         end
                 end
+        when "6"
+            database_menu(user)
+            false
         when "0"
             puts "\nGOODBYE! HAVE A PRODUCTIVE DAY!\n"
             exit
         else 
             print "\n#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS."
+        end
+    end
+
+    def database_menu(user)
+        puts "\nYou're now in a secret cabin."
+        puts "Enter [1] to VIEW ALL PET in DATABASE"
+        puts "Enter [2] to VIEW ALL ROUTINES in DATABASE"
+        puts "Enter [3] to VIEW ALL USERS"
+        puts "Enter [4] to VIEW YOUR USER ID"
+        puts "Enter [5] to DELETE YOUR ACCOUNT"
+        case input
+        when "1"
+
         end
     end
         

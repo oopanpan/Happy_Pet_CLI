@@ -22,8 +22,14 @@ class User < ActiveRecord::Base
 
     def pets_hash_by_species
         hash = {}
-        self.pets.each{|pet| hash[pet.species]}
-        hash
+        self.pets.each{|pet| hash[pet.species] = []}
+        hash.each {|key,arr|
+            arr.select{|i|
+                self.pets.each{|pet|
+                    pet.species == key    
+                }
+            }
+        }
     end
     
     #all routines for one pet
