@@ -121,13 +121,19 @@ class CommandLineInterface
         input = gets.chomp
         case input
             when "1"
-                puts "\nRoutine: #{routine.name}\n#{routine.description}\n\nIs this routine finished? Y/N"
-                complete = gets.chomp
-                if complete == "Y"
-                    routine.if_complete = true
-                    routine.on_date = date_today
-                    routine.save
-                    puts "\nNoice!\n"
+                if routine.if_complete == true
+                    puts "This routine was already done today."
+                    sleep(2)
+                    false
+                else
+                    puts "\nRoutine: #{routine.name}\n#{routine.description}\n\nIs this routine finished? Y/N"
+                    complete = gets.chomp
+                    if complete == "Y"
+                        routine.if_complete = true
+                        routine.on_date = date_today
+                        routine.save
+                        puts "\nNoice!\n"
+                    end
                 end
             when "2"
                 routine.edit_routine_by_prompt
