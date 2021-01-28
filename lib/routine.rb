@@ -2,10 +2,15 @@ class Routine < ActiveRecord::Base
     belongs_to :user
     belongs_to :pet
 
-    def edit_routing_by_prompt
-        puts "This is the #{self.pet.name}'s routine. Edit? Y/N"
-        confirmation = gets.chomp
-        while confirmation == 'Y'
+    def self.delete_routines_with_no_pet
+        bye = Routine.all.select{|routine| routine.pet === []}
+        bye.each{|routine| routine.destroy}
+    end
+
+    def edit_routine_by_prompt
+        puts "This is the #{self.pet.name}'s #{self.name} routine. Edit?"
+        confirmation = true
+        while confirmation
             puts "[1] Edit entry"
             puts "[2] Delete entry"
             choice = gets.chomp
@@ -24,7 +29,7 @@ class Routine < ActiveRecord::Base
                 del_confirm = gets.chomp
                 if del_confirm == 'Y'
                     self.destroy
-                    puts "Routine entry deleted"
+                    puts "***ROUTINE ENTRY DELETED***"
                     confirmation = false
                 end
             else

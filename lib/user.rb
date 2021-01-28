@@ -2,6 +2,10 @@ class User < ActiveRecord::Base
     has_many :routines
     has_many :pets, through: :routines
 
+    def self.all_user_names
+        self.all.map{|user| user.name}
+    end
+
     def add_pet_by_prompt
         puts "What's your pet's name?"
         name = gets.chomp.capitalize
@@ -14,6 +18,10 @@ class User < ActiveRecord::Base
     
     def pets_by_name
         self.pets.map{|pet| pet.name}.uniq
+    end
+
+    def delete_a_pet(index)
+
     end
     
     #all routines for one pet
