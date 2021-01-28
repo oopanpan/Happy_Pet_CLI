@@ -1,84 +1,87 @@
 class CommandLineInterface
     
-    #*************************
-    #INTERFACE
-    #*************************
+    #*******************#
+    #     INTERFACE     #
+    #*******************#
+
     #get user input, return the input content
     def user_name_input
-        gets.chomp
+        gets.chomp.capitalize
     end
-    #get the date today in a YYYYMMDD format as integer
+
+    #get today's date in a YYYYMMDD format as integer
     def date_today
         date = Time.now.strftime("%F")
         date.split("-").join.to_i
     end
+
     #display greeting message
     def display_greeting_message
-        puts "Welcome to Happy Pet"
-        puts "Please enter your name:"
+        puts Rainbow("Welcome to Happy Pet").yellow
+        puts Rainbow("Please enter your name:").orange
     end
     
     def top_menu
-        puts "What would you like to do? Please select by number"
-            puts "Enter [1] Add a new pet"
-            puts "Enter [2] View all of your pet(s)"
-            puts "Enter [3] Say goodbye to a pet"
-            puts "Enter [0] Quit"
-        end
+        puts Rainbow("What would you like to do? Please select by number").orange 
+        puts "Enter" + Rainbow(" [1] ").cyan + Rainbow("Add a new pet").underline
+        puts "Enter" + Rainbow(" [2] ").cyan + Rainbow("View all of your pet(s)").underline
+        puts "Enter" + Rainbow(" [3] ").cyan + Rainbow("Say goodbye to a pet").underline
+        puts "Enter" + Rainbow(" [0] ").cyan + Rainbow("Quit").underline
+    end
         
     def top_menu_selection(user, input)
         case input
         when "1"
             pet = user.add_pet_by_prompt
-            puts "\n***#{pet.name}*** is a lovely cutie.\nPlease take good care of them!\n"
+            puts Rainbow("\n **** #{pet.name} **** is a lovely cutie.\nPlease take good care of them!\n").yellow
             pet
         when "2"
             if user.pets == []
-                puts "Interesting, you don't seem to own any pet.\n"
+                puts Rainbow("\nInteresting, you don't seem to own any pet.").magenta
                 sleep(3)
                 false
             else
-                puts "\nHere is the list of your pet(s), please select by number."
+                puts Rainbow("\nHere is the list of your pet(s), please select by number").orange
                 display_array_with_number(user.pets_by_name)
                 pet = pets_selector(user, gets.chomp.to_i)
             end
         when "3"
             array = user.pets_by_name
-                if array == []
-                    puts "Interesting, you don't seem to own any pet.\n"
-                    sleep(3)
+            if array == []
+                puts Rainbow("\nInteresting, you don't seem to own any pet.").magenta
+                sleep(3)
+                false
+            else
+                puts Rainbow("\nWhich pet would you like to say goodbye? Please Select by number").orange
+                display_array_with_number(array)
+                pet = pets_selector(user, gets.chomp.to_i)
+                puts Rainbow("\nWe're saying goodbye to #{pet.name}, correct? Y/N").orange 
+                ans = gets.chomp
+                if ans == "Y"
+                    puts Rainbow("..").yellow
+                    sleep(1)
+                    puts Rainbow("...").yellow
+                    sleep(1)
+                    puts Rainbow("Goodbye #{pet.name} we'll miss you!").yellow
+                    Routine.delete_routines_along_with_pet(pet)
+                    pet.destroy
+                    user.reload
                     false
-                else
-                    puts "Which pet would you like to say goodbye? Please Select by number."
-                    display_array_with_number(array)
-                    pet = pets_selector(user, gets.chomp.to_i)
-                    puts "We're saying goodbye to #{pet.name},correct? Y/N"
-                        ans = gets.chomp
-                        if ans == "Y"
-                            puts ".."
-                            sleep(1)
-                            puts "..."
-                            sleep(1)
-                            puts "Goodbye #{pet.name} we'll miss you!"
-                            Routine.delete_routines_along_with_pet(pet)
-                            pet.destroy
-                            user.reload
-                            false
-                        end
                 end
+            end
         when "0"
-            puts "\nGOODBYE! HAVE A PRODUCTIVE DAY!\n"
+            puts Rainbow("\nGOODBYE! HAVE A PRODUCTIVE DAY!\n").yellow
             exit
         else 
-            print "\n#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS."
+            print Rainbow("\n#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS.").magenta
         end
     end
         
     def routine_menu
-        puts "Enter [1] to ADD ROUTINE!"
-        puts "Enter [2] to VIEW INCOMPLETE ROUTINE FOR THE DAY!"
-        puts "Enter [3] to VIEW ALL ROUTINE!"
-        puts "Enter [0] to GO BACK TO LAST MENU!"
+        puts "Enter" + Rainbow(" [1] ").cyan + Rainbow("to ADD ROUTINE!").underline
+        puts "Enter" + Rainbow(" [2] ").cyan + Rainbow("to VIEW INCOMPLETE ROUTINE FOR THE DAY!").underline
+        puts "Enter" + Rainbow(" [3] ").cyan + Rainbow("to VIEW ALL ROUTINE!").underline
+        puts "Enter" + Rainbow(" [0] ").cyan + Rainbow("to GO BACK TO LAST MENU!").underline 
     end
         
     def routine_user_input(user, pet, input)
@@ -88,61 +91,61 @@ class CommandLineInterface
             pet.add_routine(user)
         when "2"
             if array == []
-                puts "#{pet.name} doesn't seem to have any incomplete routine yet."
+                puts Rainbow("#{pet.name} doesn't seem to have any incomplete routine yet.").magenta
                 sleep(2)
                 false
             else
-                puts "\nPlease select a routine by number:"
+                puts Rainbow("\nPlease select a routine by number:").orange 
                 display_array_with_number(user.todo_routines_by_name(pet))
                 user.reload
                 2
             end
         when "3"
             if array == []
-                puts "#{pet.name} doesn't seem to have any routine yet."
+                puts Rainbow("#{pet.name} doesn't seem to have any routine yet.").magenta
                 sleep(2)
                 false
             else
-                puts "\nPlease select a routine by number:"
+                puts Rainbow("\nPlease select a routine by number:").orange 
                 display_array_with_number(user.all_routines_by_name(pet))
                 3
             end
         when "0"
             $in_pet_menu = false
         else 
-            print "****#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n****"
+            print Rainbow("**** #{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. ****").magenta
             routine_menu
         end
     end
 
     def routine_sub_menu(routine)
-        puts "Enter [1] to COMPLETE ROUTINE."
-        puts "Enter [2] to EDIT/DELETE ROUTINE."
+        puts "Enter" + Rainbow(" [1] ").cyan + Rainbow("to COMPLETE ROUTINE").underline
+        puts "Enter" + Rainbow(" [2] ").cyan + Rainbow("to EDIT/DELETE ROUTINE").underline
         input = gets.chomp
         case input
-            when "1"
-                if routine.if_complete == true
-                    puts "This routine was already done today."
-                    sleep(2)
-                    false
-                else
-                    puts "\nRoutine: #{routine.name}\n#{routine.description}\n\nIs this routine finished? Y/N"
-                    complete = gets.chomp
-                    if complete == "Y"
-                        routine.if_complete = true
-                        routine.on_date = date_today
-                        routine.save
-                        puts "\nNoice!\n"
-                    end
-                end
-            when "2"
-                routine.edit_routine_by_prompt
-            when "0"
-                $in_routine_menu = false
+        when "1"
+            if routine.if_complete == true
+                puts Rainbow("This routine was already done today.").yellow
+                sleep(2)
                 false
-            else 
-                print "#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. \n\n"
-                routine_menu
+            else
+                puts Rainbow("\nRoutine: #{routine.name}\n#{routine.description}\n\nIs this routine finished? Y/N").orange
+                complete = gets.chomp
+                if complete == "Y"
+                    routine.if_complete = true
+                    routine.on_date = date_today
+                    routine.save
+                    puts Rainbow("\nNOICE!\n").yellow
+                end
+            end
+        when "2"
+            routine.edit_routine_by_prompt
+        when "0"
+            $in_routine_menu = false
+            false
+        else 
+            print Rainbow("**** #{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. ****").magenta
+            routine_menu
         end
     end
     
@@ -189,7 +192,7 @@ class CommandLineInterface
             display_greeting_message
             user = User.find_or_create_by(name: user_name_input)
             while user do
-                puts "\nWelcome, #{user.name}\n"
+                puts Rainbow("\nUser: #{user.name}\n").yellow
                 top_menu
                 pet = top_menu_selection(user, gets.chomp)
                 $in_pet_menu = true
@@ -197,9 +200,9 @@ class CommandLineInterface
                     pet.add_routine(user)
                 end
                 while $in_pet_menu && pet do
-                    puts "\nThis is #{pet.name}'s Routine menu"
+                    puts Rainbow("\nThis is #{pet.name}'s Routine menu").yellow
                     pet.reset_routines_status(date_today)
-                    puts "There's #{user.todo_routines(pet).count} more incomplete routine(s)\n"
+                    puts Rainbow("There's #{user.todo_routines(pet).count} more incomplete routine(s)\n").yellow    
                     user.reload
                     routine_menu
                     proceed = routine_user_input(user, pet, gets.chomp)
@@ -215,25 +218,5 @@ class CommandLineInterface
                 end
             end    
         end
-    end
-
-
-
-#----------------------------------------------------------
-#----------------------------------------------------------
-
-    #this method helps user to create a pet, returning pet instance 
-
-    def add_pet(user)
-        puts "\n\nTo add a pet, Please enter the pet name: "
-        input = STDIN.gets.chomp()
-        new_pet = Pet.new(name:input)
-        puts "Please enter #{input} species: "
-        new_pet.species = STDIN.gets.chomp()
-        puts "Please enter #{input} age: "
-        new_pet.age = STDIN.gets.chomp()
-        new_pet.save
-        puts "Pet #{input} created!"
-        add_routine(user)
     end
 end

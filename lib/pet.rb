@@ -8,12 +8,12 @@ class Pet < ActiveRecord::Base
     end
 
     def add_routine(user)
-        puts "Please add a routine: "
-        r_name = STDIN.gets.chomp()
-        puts "Please enter routine #{r_name} description: "
-        r_description = STDIN.gets.chomp()
+        puts Rainbow("Please add a routine: ").orange 
+        r_name = gets.chomp
+        puts Rainbow("Please enter routine #{r_name} description: ").orange
+        r_description = gets.chomp
         Routine.create(name:r_name, description: r_description, user_id: user.id, pet_id: self.id)
-        puts "\n****#{self.name}'s #{r_name} routine created!***"
+        puts Rainbow("\n**** #{self.name}'s #{r_name} routine created! ****").yellow
     end
 
     def reset_routines_status(date)
@@ -21,5 +21,5 @@ class Pet < ActiveRecord::Base
         arr.each{|routine| routine.if_complete = nil}
         arr.each{|routine| routine.save}
     end
-
+    
 end
