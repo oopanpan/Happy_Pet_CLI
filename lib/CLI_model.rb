@@ -3,7 +3,7 @@ class CommandLineInterface
     #*************************
     #INTERFACE
     #*************************
-    #get user input, return the imput content
+    #get user input, return the input content
     def user_name_input
         gets.chomp
     end
@@ -20,10 +20,10 @@ class CommandLineInterface
     
     def top_menu
         puts "What would you like to do? Please select by number"
-            puts "[1] Add a new pet"
-            puts "[2] View all of your pet(s)"
-            puts "[3] Say goodbye to a pet"
-            puts "[0] Quit"
+            puts "Enter [1] Add a new pet"
+            puts "Enter [2] View all of your pet(s)"
+            puts "Enter [3] Say goodbye to a pet"
+            puts "Enter [0] Quit"
         end
         
     def top_menu_selection(user, input)
@@ -49,7 +49,7 @@ class CommandLineInterface
                     sleep(3)
                     false
                 else
-                    puts "Which pet would you like to say goodbuy? Pleasee Select by number"
+                    puts "Which pet would you like to say goodbye? Please Select by number."
                     display_array_with_number(array)
                     pet = pets_selector(user, gets.chomp.to_i)
                     puts "We're saying goodbye to #{pet.name},correct? Y/N"
@@ -75,10 +75,10 @@ class CommandLineInterface
     end
         
     def routine_menu
-        puts "Press [1] to ADD ROUTINE!"
-        puts "Press [2] to VIEW IMCOMPLETE ROUTINE FOR THE DAY!"
-        puts "Press [3] to VIEW ALL ROUTINE!"
-        puts "Press [0] to GO BACK TO LAST MENU! "
+        puts "Enter [1] to ADD ROUTINE!"
+        puts "Enter [2] to VIEW INCOMPLETE ROUTINE FOR THE DAY!"
+        puts "Enter [3] to VIEW ALL ROUTINE!"
+        puts "Enter [0] to GO BACK TO LAST MENU!"
     end
         
     def routine_user_input(user, pet, input)
@@ -88,7 +88,7 @@ class CommandLineInterface
             pet.add_routine(user)
         when "2"
             if array == []
-                puts "#{pet.name} doesn't seem to have any incomplete routine yet"
+                puts "#{pet.name} doesn't seem to have any incomplete routine yet."
                 sleep(2)
                 false
             else
@@ -99,7 +99,7 @@ class CommandLineInterface
             end
         when "3"
             if array == []
-                puts "#{pet.name} doesn't seem to have any routine yet"
+                puts "#{pet.name} doesn't seem to have any routine yet."
                 sleep(2)
                 false
             else
@@ -117,7 +117,7 @@ class CommandLineInterface
 
     def routine_sub_menu(routine)
         puts "Enter [1] to COMPLETE ROUTINE."
-        puts "Enter [2] to EDIT/DELTE ROUTINE."
+        puts "Enter [2] to EDIT/DELETE ROUTINE."
         input = gets.chomp
         case input
             when "1"
@@ -199,7 +199,7 @@ class CommandLineInterface
                 while $in_pet_menu && pet do
                     puts "\nThis is #{pet.name}'s Routine menu"
                     pet.reset_routines_status(date_today)
-                    puts "There's #{user.todo_routines(pet).count} more imcomplete routine(s)\n"
+                    puts "There's #{user.todo_routines(pet).count} more incomplete routine(s)\n"
                     user.reload
                     routine_menu
                     proceed = routine_user_input(user, pet, gets.chomp)
@@ -222,31 +222,6 @@ class CommandLineInterface
 #----------------------------------------------------------
 #----------------------------------------------------------
 
-
-
-    # def run 
-    #     user = greet 
-    #     self.menu_option(user)
-    # end
-
-    def greet 
-        puts "Welcome to PanSin Pet Routine Checker"
-        puts "Please enter your name: "
-        input = STDIN.gets.chomp()
-        user = User.find_or_create_by(name:input)
-    end
-
-    def menu_option(user)
-        puts "Press 1 to ADD PETS!"
-        puts "Press 2 to VIEW PETS!"
-        puts "Press 0 to exit! "
-        input = STDIN.gets.chomp()
-        puts self.user_input(user, input)
-    end
-
-    
-
-    
     #this method helps user to create a pet, returning pet instance 
 
     def add_pet(user)
@@ -261,8 +236,4 @@ class CommandLineInterface
         puts "Pet #{input} created!"
         add_routine(user)
     end
-
-
- 
-
 end

@@ -54,12 +54,4 @@ class User < ActiveRecord::Base
             menu_option(user)
         end
     end
-
-
-
-
-
-
-
-
 end

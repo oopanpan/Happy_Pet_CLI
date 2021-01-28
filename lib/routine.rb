@@ -11,13 +11,13 @@ class Routine < ActiveRecord::Base
         puts "This is the #{self.pet.name}'s #{self.name} routine. Edit?"
         confirmation = true
         while confirmation
-            puts "[1] Edit entry"
-            puts "[2] Delete entry"
+            puts "Enter [1] Edit entry"
+            puts "Enter [2] Delete entry"
             choice = gets.chomp
             if choice == "1"
-                puts "What's the new name of the routine"
+                puts "What's the new name of the routine?"
                 name = gets.chomp
-                puts "Describe the new #{name} routine for #{self.pet.name}"
+                puts "Describe the new #{name} routine for #{self.pet.name}."
                 des = gets.chomp
                 self.name = name
                 self.description = des
