@@ -5,6 +5,10 @@ class User < ActiveRecord::Base
     def self.all_user_names
         self.all.map{|user| user.name}
     end
+    def deleting_routines_with_user
+        arr = Routine.all.select{|routine| routine.user_id == self.id}
+        arr.each{|routine| routine.destroy}
+    end
 
     def add_pet_by_prompt
         puts Rainbow("\nTo add a pet, Please enter the pet name:").orange 
