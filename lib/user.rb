@@ -25,21 +25,8 @@ class User < ActiveRecord::Base
         self.pets.map{|pet| pet.name}.uniq
     end
 
-<<<<<<< HEAD
-    def pets_hash_by_species
-        hash = {}
-        self.pets.each{|pet| hash[pet.species] = []}
-        hash.each {|key,arr|
-            arr.select{|i|
-                self.pets.each{|pet|
-                    pet.species == key    
-                }
-            }
-        }
-=======
     def pets_by_detail
         self.pets.uniq
->>>>>>> master
     end
     
     #all routines for one pet
