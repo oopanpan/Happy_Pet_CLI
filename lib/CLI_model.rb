@@ -87,8 +87,6 @@ class CommandLineInterface
         when "0"
             puts Rainbow("\nGOODBYE! HAVE A PRODUCTIVE DAY!\n").yellow
             exit
-        else 
-            print Rainbow("\n#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS.").magenta
         end
     end
 
