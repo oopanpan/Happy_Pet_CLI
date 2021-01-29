@@ -21,6 +21,7 @@ class Routine < ActiveRecord::Base
                 des = gets.chomp
                 self.update(name:name, description:des)
                 puts Rainbow("**** ROUTINE ENTRY UPDATED! ****").yellow
+                sleep(1)
                 confirmation = false
             elsif choice == "2"
                 puts Rainbow("**** Warning, deleting the last routine will erase pet data on your account. ****").magenta

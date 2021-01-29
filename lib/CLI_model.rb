@@ -292,8 +292,8 @@ class CommandLineInterface
     
     def run
         system "clear"
-        $running = true
-        while $running do
+        running = true
+        while running do
             display_greeting_message
             user = User.find_or_create_by(name: user_name_input)
             while user do
