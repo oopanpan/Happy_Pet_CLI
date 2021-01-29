@@ -297,6 +297,7 @@ class CommandLineInterface
                             routine_sub_menu(routine)
                         else
                             puts Rainbow("**** INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. ****").magenta
+                        end
                     end
                 end
             end    
