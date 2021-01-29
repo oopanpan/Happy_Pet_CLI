@@ -34,10 +34,10 @@ class CommandLineInterface
     
     def top_menu
         puts Rainbow("What would you like to do? Please select by number").orange 
-        puts "Enter" + Rainbow(" [1] ").cyan + Rainbow("Add a new pet").underline
-        puts "Enter" + Rainbow(" [2] ").cyan + Rainbow("View all of your pet(s)").underline
-        puts "Enter" + Rainbow(" [3] ").cyan + Rainbow("Say goodbye to a pet").underline
-        puts "Enter" + Rainbow(" [0] ").cyan + Rainbow("Quit").underline
+        puts "Enter" + Rainbow(" [1] ").cyan + Rainbow("ADD A NEW PET").underline
+        puts "Enter" + Rainbow(" [2] ").cyan + Rainbow("VIEW ALL YOUR PET(S)").underline
+        puts "Enter" + Rainbow(" [3] ").cyan + Rainbow("SAY GOODBYE TO A PET").underline
+        puts "Enter" + Rainbow(" [0] ").cyan + Rainbow("EXIT PROGRAM").underline
     end
         
     def top_menu_selection(user, input)
