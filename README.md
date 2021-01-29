@@ -1,11 +1,11 @@
 # Module One Final Project
 
-Name: Happy Pet (Command Line CRUD App) 
+Name: Happy Pet App (Command Line CRUD App) 
 
-Contributors: Kai Peng Li (GitHub: oopanpan)
+Contributors: Kai Peng Li (GitHub: oopanpan) & 
               Sin Wildy (GitHub: urbanemotions) 
 
-Acknowledgements: Lantz Warrick (Flatiron School - Seattle)
+Acknowledgements: Lantz Warrick (Flatiron School - Seattle) & 
                   Jasper Reed (Flatiron School - Seattle)
 
 Goal: ActivityRecord allowing users to:-
@@ -36,6 +36,18 @@ Installation instructions:
   * Type 'rake db:migrate'
   * Type 'rake db:seed'
   * Type 'ruby bin/run.rb', which will load the Happy Pet App
+
+Gems: source - "https://rubygems.org"
+* gem 'activerecord', '~> 5.2.3', :require => 'active_record'
+* gem 'rake'
+* gem 'require_all'
+* gem 'sqlite3', '~>1.3.6'
+* gem 'pry'
+* gem 'sinatra-activerecord', :require => 'sinatra/activerecord'
+* gem 'rspec'
+* gem 'database_cleaner'
+* gem 'faker'
+* gem 'rainbow'
 
 Happy Pet App Basic instructions:
 * Welcome screen, and prompts the user to enter their name  
