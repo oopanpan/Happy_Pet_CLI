@@ -1,59 +1,73 @@
-# Module One Final Project Guidelines
+# Module One Final Project
 
-Congratulations, you're at the end of module one! You've worked crazy hard to get here and have learned a ton.
+Name: Happy Pet (Command Line CRUD App) 
 
-For your final project, we'll be building a Command Line database application.
+Contributors: Kai Peng Li (GitHub: oopanpan)
+              Sin Wildy (GitHub: urbanemotions) 
 
-## Project Requirements
+Acknowledgements: Lantz Warrick (Flatiron School - Seattle)
+                  Jasper Reed (Flatiron School - Seattle)
 
-### Option One - Data Analytics Project
+Goal: ActivityRecord allowing users to:-
+  * add pet(s)
+  * add routine(s) for each pet
+  * view all pets for a particular user
+  * view all routines for a particular pet 
+  * select and edit the routine(s) for a particular pet 
+  * select and complete the routine(s) for a particular pet 
+  * select and delete routine(s) for a particular pet
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have at minimum three models including one join model. This means you must have a many-to-many relationship.
-3. You should seed your database using data that you collect either from a CSV, a website by scraping, or an API.
-4. Your models should have methods that answer interesting questions about the data. For example, if you've collected info about movie reviews, what is the most popular movie? What movie has the most reviews?
-5. You should provide a CLI to display the return values of your interesting methods.  
-6. Use good OO design patterns. You should have separate classes for your models and CLI interface.
+Description: Users have the ability to login and have the option to view and manage their pet(s) and routine(s). 
+Users can add new pet(s), view all their pet(s), view their pets routine(s), add new routine(s) for each pet, 
+edit/update the routine(s) for each pet, delete routine(s) for each pet, and update the status to completed when 
+the routine is completed on a daily basis. 
+  * As a user, I want to be able to enter my name to retrieve my pet(s) records
+  * As a user, I want to be able to add a new pet(s) and new routine(s) for that particular pet 
+  * As a user, I want to be able to retrieve a list of routine(s) for each pet 
+  * As a user, I want to be able to edit an existing routine(s) for a particular pet
+  * As a user, I want to be able to delete an existing routine(s) for a particular pet
+  * As a user, I want to be able to select an existing routine(s) and change the status to complete, in order to display the current incomplete routine count
 
-  **Resource:** [Easy Access APIs](https://github.com/learn-co-curriculum/easy-access-apis)
+Installation instructions:
+* In your terminal:-
+  * Clone the repository:- https://github.com/oopanpan/ruby-project-guidelines
+  * cd into the directory
+  * Type 'bundle install'
+  * Type 'rake db:migrate'
+  * Type 'rake db:seed'
+  * Type 'ruby bin/run.rb', which will load the Happy Pet App
 
-### Option Two - Command Line CRUD App
+Happy Pet App Basic instructions:
+* Welcome screen, and prompts the user to enter their name  
+* Display the menu: 
+  * Enter [1] to ADD A NEW PET!
+  * Enter [2] to VIEW ALL OF YOUR PET(S)!
+  * Enter [3] to SAY GOODBYE TO A PET!
+  * Enter [0] to QUIT!
+* To add a new pet
+  * Enter 1, prompting the user to enter the name of the pet 
+  * Enter pet name, prompting the user to enter the species 
+  * Enter the species, prompting the user to enter the age 
+  * Enter the age to display a message related to the pet, promopting the user to add a new routine for that pet
+* To add a routine 
+  * Enter routine name, prompting the user to enter the routine description
+  * Enter routine description, display a message related to the pet and routine, and set the routine status as incomplete
+* Display the menu:
+  * Enter [1] to ADD ROUTINE!
+  * Enter [2] to VIEW INCOMPLETE ROUTINE FOR THE DAY!
+  * Enter [3] to VIEW ALL ROUTINE!
+  * Enter [0] to GO BACK TO LAST MENU!  
+* To view incomplete routine(s)  
+  * Enter 2, allowing the user to view all incomplete routine(s) for a particalar pet
+  * Enter a number assigned to the routine to make changes, which will allow the user to select from the following menu:
+    * Enter [1] to COMPLETE ROUTINE
+    * Enter [2] to EDIT/DELETE ROUTINE
+  * Enter 1, prompting the user to confirm whether the routine is completed or not
+  * Display the current number of incomplete routine(s) for that particular pet
+* To view all routine(s)
+  * Enter 3, allowing the user to view all routine(s) for a particular pet 
+  * Display all the routines no matter the status (completed and incompleted) 
+* To delete routine(s) 
+  * Enter 2, allowing the user to edit or delete the routine entry 
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have a minimum of three models.
-3. You should build out a CLI to give your user full CRUD ability for at least one of your resources. For example, build out a command line To-Do list. A user should be able to create a new to-do, see all todos, update a todo item, and delete a todo. Todos can be grouped into categories, so that a to-do has many categories and categories have many to-dos.
-4. Use good OO design patterns. You should have separate classes for your models and CLI interface.
-
-### Brainstorming and Proposing a Project Idea
-
-Projects need to be approved prior to launching into them, so take some time to brainstorm project options that will fulfill the requirements above.  You must have a minimum of four [user stories](https://en.wikipedia.org/wiki/User_story) to help explain how a user will interact with your app.  A user story should follow the general structure of `"As a <role>, I want <goal/desire> so that <benefit>"`. For example, if we were creating an app to randomly choose nearby restaurants on Yelp, we might write:
-
-* As a user, I want to be able to enter my name to retrieve my records
-* As a user, I want to enter a location and be given a random nearby restaurant suggestion
-* As a user, I should be able to reject a suggestion and not see that restaurant suggestion again
-* As a user, I want to be able to save to and retrieve a list of favorite restaurant suggestions
-
-## Instructions
-
-1. Fork and clone this repository.
-2. Build your application. Make sure to commit early and commit often. Commit messages should be meaningful (clearly describe what you're doing in the commit) and accurate (there should be nothing in the commit that doesn't match the description in the commit message). Good rule of thumb is to commit every 3-7 mins of actual coding time. Most of your commits should have under 15 lines of code and a 2 line commit is perfectly acceptable.
-3. Make sure to create a good README.md with a short description, install instructions, a contributor's guide and a link to the license for your code.
-4. Make sure your project checks off each of the above requirements.
-5. Prepare a video demo (narration helps!) describing how a user would interact with your working project.
-    * The video should:
-      - Have an overview of your project. (2 minutes max)
-6. Prepare a presentation to follow your video. (3 minutes max)
-    * Your presentation should:
-      - Describe something you struggled to build, and show us how you ultimately implemented it in your code.
-      - Discuss 3 things you learned in the process of working on this project.
-      - Address what, if anything, you would change or add to what you have today.
-      - Present any code you would like to highlight.   
-7. *OPTIONAL, BUT RECOMMENDED*: Write a blog post about the project and process.
-
----
-### Common Questions:
-- How do I turn off my SQL logger?
-```ruby
-# in config/environment.rb add this line:
-ActiveRecord::Base.logger = nil
-```
+For more instructions on how to use Happy Pet App, please subscribe to our subscription. 
