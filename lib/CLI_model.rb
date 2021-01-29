@@ -79,10 +79,7 @@ class CommandLineInterface
                     user.reload
                     false
                 end
-<<<<<<< HEAD
-=======
             end
->>>>>>> master
         when "6"
             database_menu(user)
             false
@@ -94,18 +91,6 @@ class CommandLineInterface
         end
     end
 
-<<<<<<< HEAD
-    def database_menu(user)
-        puts "\nYou're now in a secret cabin."
-        puts "Enter [1] to VIEW ALL PET in DATABASE"
-        puts "Enter [2] to VIEW ALL ROUTINES in DATABASE"
-        puts "Enter [3] to VIEW ALL USERS"
-        puts "Enter [4] to VIEW YOUR USER ID"
-        puts "Enter [5] to DELETE YOUR ACCOUNT"
-        case input
-        when "1"
-
-=======
     def pause_on
         puts "Press any key to continue\r"
         gets
@@ -149,7 +134,6 @@ class CommandLineInterface
             when "0"
                 break
             end
->>>>>>> master
         end
     end
         
@@ -167,16 +151,12 @@ class CommandLineInterface
         when "1"
             pet.add_routine(user)
         when "2"
-            if array == []
+            if array.count == 0
                 puts Rainbow("#{pet.name} doesn't seem to have any incomplete routine yet.").magenta
                 sleep(2)
                 false
             elsif incomp_arr.count == 0
-<<<<<<< HEAD
-                puts Rainbow("*** THERE'S NO MORE ROUTINE FOR #{pet.name} TODAY! ***")
-=======
                 puts Rainbow("*** THERE'S NO MORE ROUTINE FOR #{pet.name} TODAY! ***").magenta
->>>>>>> master
                 sleep(2)
                 false
             else
@@ -186,13 +166,8 @@ class CommandLineInterface
                 2
             end
         when "3"
-<<<<<<< HEAD
             if array.count == 0
-                puts "#{pet.name} doesn't seem to have any routine yet"
-=======
-            if array == []
                 puts Rainbow("#{pet.name} doesn't seem to have any routine yet.").magenta
->>>>>>> master
                 sleep(2)
                 false
             else
