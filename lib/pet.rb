@@ -16,6 +16,20 @@ class Pet < ActiveRecord::Base
         puts Rainbow("\n**** #{self.name}'s #{r_name} routine created! ****").yellow
     end
 
+    def edit_by_prompt
+        old_name = self.name
+        puts Rainbow("You are now editing your #{self.species} #{self.name}...").yellow
+        sleep(1)
+        puts Rainbow("New name for #{self.name}:").orange
+        name = gets.chomp.capitalize
+        puts Rainbow("What's their species?").orange
+        species = gets.chomp.downcase
+        puts Rainbow("What's their age?").orange
+        age = gets.chomp.to_i
+        self.update(name:name, species:species, age:age)
+        puts Rainbow("\n**** #{old_name} is now #{self.name}! ****").yellow
+    end
+
     def reset_routines_status(date)
         arr = self.routines.select{|routine| routine.on_date != date}
         arr.each{|routine| routine.if_complete = nil}
