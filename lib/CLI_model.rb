@@ -151,7 +151,7 @@ class CommandLineInterface
         when "1"
             pet.add_routine(user)
         when "2"
-            if array == []
+            if array.count == 0
                 puts Rainbow("#{pet.name} doesn't seem to have any incomplete routine yet.").magenta
                 sleep(2)
                 false
@@ -166,7 +166,7 @@ class CommandLineInterface
                 2
             end
         when "3"
-            if array == []
+            if array.count == 0
                 puts Rainbow("#{pet.name} doesn't seem to have any routine yet.").magenta
                 sleep(2)
                 false
@@ -284,12 +284,19 @@ class CommandLineInterface
                     proceed = routine_user_input(user, pet, gets.chomp)
                     if proceed == 2
                         routine_name = user.todo_routines_by_name(pet)[gets.chop.to_i-1]
-                        routine = routine_selector(routine_name, user, pet)
-                        routine_sub_menu(routine)
+                        if routine_name
+                            routine = routine_selector(routine_name, user, pet)
+                            routine_sub_menu(routine)
+                        else
+                            puts Rainbow("**** INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. ****").magenta
+                        end
                     elsif proceed == 3
                         routine_name = user.all_routines_by_name(pet)[gets.chop.to_i-1]
-                        routine = routine_selector(routine_name, user, pet)
-                        routine_sub_menu(routine)
+                        if routine_name
+                            routine = routine_selector(routine_name, user, pet)
+                            routine_sub_menu(routine)
+                        else
+                            puts Rainbow("**** INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. ****").magenta
                     end
                 end
             end    
