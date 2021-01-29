@@ -31,8 +31,11 @@ class Routine < ActiveRecord::Base
                 if del_confirm == 'Y'
                     puts Rainbow("**** ROUTINE ENTRY DELETED! ****").yellow
                     self.destroy
+                    Pet.data_saver
+                        if pet.routines.count == 0
+                            $in_pet_menu = false
+                        end
                     confirmation = false
-                    $in_pet_menu = false
                 end
             else
                 puts Rainbow("**** INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. ****").magenta

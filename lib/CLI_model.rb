@@ -17,6 +17,17 @@ class CommandLineInterface
 
     #display greeting message
     def display_greeting_message
+        puts Rainbow("
+        ('-. .-.   ('-.      _ (`-.    _ (`-.                       _ (`-.    ('-.   .-') _    
+        ( OO )  /  ( OO ).-. ( (OO  )  ( (OO  )                     ( (OO  ) _(  OO) (  OO) )   
+        ,--. ,--.  / . --. /_.`     \ _.`     \  ,--.   ,--.       _.`     \(,------./     '._  
+        |  | |  |  | \-.  \(__...--''(__...--''   \  `.'  /       (__...--'' |  .---'|'--...__) 
+        |   .|  |.-'-'  |  ||  /  | | |  /  | | .-')     /         |  /  | | |  |    '--.  .--' 
+        |       | \| |_.'  ||  |_.' | |  |_.' |(OO  \   /          |  |_.' |(|  '--.    |  |    
+        |  .-.  |  |  .-.  ||  .___.' |  .___.' |   /  /\_         |  .___.' |  .--'    |  |    
+        |  | |  |  |  | |  ||  |      |  |      `-./  /.__)        |  |      |  `---.   |  |    
+        `--' `--'  `--' `--'`--'      `--'        `--'             `--'      `------'   `--'    
+       ").magenta
         puts Rainbow("Welcome to Happy Pet").yellow
         puts Rainbow("Please enter your name:").orange
     end
@@ -69,11 +80,60 @@ class CommandLineInterface
                     false
                 end
             end
+        when "6"
+            database_menu(user)
+            false
         when "0"
             puts Rainbow("\nGOODBYE! HAVE A PRODUCTIVE DAY!\n").yellow
             exit
         else 
             print Rainbow("\n#{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS.").magenta
+        end
+    end
+
+    def pause_on
+        puts "Press any key to continue\r"
+        gets
+    end
+
+    def database_menu(user)
+        loop do
+            puts "\nYou're now in a secret cabin."
+            puts "Enter [1] to VIEW ALL PET in DATABASE"
+            puts "Enter [2] to VIEW ALL ROUTINES in DATABASE"
+            puts "Enter [3] to VIEW ALL USERS"
+            puts "Enter [4] to VIEW YOUR USER ID"
+            puts "Enter [5] to DELETE YOUR ACCOUNT"
+            puts "Enter [0] to Go Back"
+            input = gets.chomp
+            case input
+            when "1"
+                puts display_all_pets_by_name
+                pause_on
+            when "2"
+                puts display_all_routines_by_name
+                pause_on
+            when "3"
+                puts display_all_users_by_name
+                pause_on
+            when "4"
+                puts "\nYour ID is #{user.id}"
+                pause_on
+            when "5"
+                puts "All the associated routines and pets will be erased from database"
+                puts "Deleting #{user.name}, Confirm? Y/N"
+                confirmation = gets.chomp
+                if confirmation == "Y"
+                    user.deleting_routines_with_user
+                    Pet.data_saver
+                    user.destroy
+                    puts "\nUser account deleted, exiting program..."
+                    pause_on
+                    exit
+                end
+            when "0"
+                break
+            end
         end
     end
         
@@ -86,12 +146,17 @@ class CommandLineInterface
         
     def routine_user_input(user, pet, input)
         array = user.all_routines_by_name(pet)
+        incomp_arr = user.todo_routines(pet)
         case input
         when "1"
             pet.add_routine(user)
         when "2"
             if array == []
                 puts Rainbow("#{pet.name} doesn't seem to have any incomplete routine yet.").magenta
+                sleep(2)
+                false
+            elsif incomp_arr.count == 0
+                puts Rainbow("*** THERE'S NO MORE ROUTINE FOR #{pet.name} TODAY! ***").magenta
                 sleep(2)
                 false
             else
@@ -121,6 +186,7 @@ class CommandLineInterface
     def routine_sub_menu(routine)
         puts "Enter" + Rainbow(" [1] ").cyan + Rainbow("to COMPLETE ROUTINE").underline
         puts "Enter" + Rainbow(" [2] ").cyan + Rainbow("to EDIT/DELETE ROUTINE").underline
+        puts "Enter" + Rainbow(" [0] ").cyan + Rainbow("to PREVIOUS MENU").underline
         input = gets.chomp
         case input
         when "1"
@@ -154,7 +220,15 @@ class CommandLineInterface
     #display main menu, take in an user object, display all the dog
     #in the database
     def display_all_pets_by_name
-        arr = Pet.all.map{|pet| pet.name}
+        Pet.all.map{|pet| pet.name}
+    end
+
+    def display_all_routines_by_name
+        Routine.all.map{|routine| routine.name}
+    end
+
+    def display_all_users_by_name
+        User.all.map{|user| user.name}
     end
     
     def display_array_with_number(array)
@@ -187,16 +261,18 @@ class CommandLineInterface
 
     
     def run
+        system "clear"
         $running = true
         while $running do
             display_greeting_message
             user = User.find_or_create_by(name: user_name_input)
             while user do
+                system "clear"
                 puts Rainbow("\nUser: #{user.name}\n").yellow
                 top_menu
                 pet = top_menu_selection(user, gets.chomp)
                 $in_pet_menu = true
-                if pet.routines.count == 0
+                if pet && pet.routines.count == 0
                     pet.add_routine(user)
                 end
                 while $in_pet_menu && pet do
