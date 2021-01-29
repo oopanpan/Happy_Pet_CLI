@@ -201,6 +201,7 @@ class CommandLineInterface
             $in_pet_menu = false
         else 
             print Rainbow("**** #{input} INVALID OPTION. PLEASE REVIEW THE MENU OPTIONS. ****").magenta
+            sleep(2)
             routine_menu
         end
     end
